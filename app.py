@@ -81,10 +81,11 @@ def login():
     return render_template('index5.html', user=user)
 
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/')
 def home():
     user = get_current_user()
-    return render_template('index1.html', user=user)
+    question_list = Question.query.filter(Question.answer_text != "").order_by(Question.id).all()
+    return render_template('index1.html', user=user, question_list=question_list)
 
 
 @app.route('/add_teacher/<int:user_id>')
@@ -151,12 +152,20 @@ def settings():
     return render_template('index3.html', users=users, user=user)
 
 
-@app.route('/change/<int:question_id>')
+@app.route('/change/<int:question_id>', methods=['POST', 'GET'])
 def change(question_id):
     user = get_current_user()
     question_info = Question.query.filter(Question.id == question_id).first()
-    question_id = Question.query.filter(Question.teacher_id == user.id).order_by(Question.id).all()
-    return render_template('index4.html', user=user, question_info=question_info, question_id=question_id)
+    if request.method == "POST":
+        answer_text = request.form.get('answer')
+        Question.query.filter(Question.id == question_id).update({
+            "answer_text": answer_text
+        })
+
+        db.session.commit()
+        return redirect(url_for('questionlist', question_id=question_id))
+
+    return render_template('index4.html', user=user, question_info=question_info)
 
 
 @app.route('/change2')

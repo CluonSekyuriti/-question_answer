@@ -5,25 +5,25 @@
 {% endblock %}
 {% block body %}
     <div class="box2">
-        <form class="box2__item" action="">
+        <form class="box2__item" action="{{ url_for("change", question_id=question_info.id) }} " method="post">
             <div class="box2__item__time1">
                 <div class="box2__item__time1__div">
-                    <p>1 User name </p>
+                    <p>{{ user.username }}</p>
                 </div>
             </div>
             <div class="box2__item__time2">
                 <div class="box2__item__time2__div1">
                     <p>Question</p>
                     <div class="textarea">
-                        <h1>{{ question_id.question_text }}</h1>
+                        <p>{{ question_info.question_text }}</p>
                     </div>
                 </div>
                 <div class="box2__item__time2__div3">
                     <p>Answer</p>
-                    <textarea name="" id="">Answer:</textarea>
+                    <textarea name="answer" id="" placeholder="Answer:"> </textarea>
                 </div>
                 <div class="box2__item__time2__div2">
-                    <button>Send question</button>
+                    <button>Send answer</button>
                 </div>
             </div>
         </form>
